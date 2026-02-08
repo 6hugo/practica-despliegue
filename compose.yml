@@ -1,0 +1,55 @@
+services:
+  # 1. BASE DE DATOS (MySQL)
+  db:
+    image: mysql:8.0                     # Versión estable de MySQL
+    container_name: db_micro             # Nombre para identificarlo fácilmente
+    restart: always                      # Si se cae, se levanta solo
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD} # Se lee del archivo .env
+      MYSQL_DATABASE: symfony_db         # Nombre de la BD que usará el backend
+    volumes:
+      - db_data:/var/lib/mysql           # Persistencia: los datos no se borran al apagar
+
+  # 2. BACKEND (Symfony)
+  backend:
+    build: ./backend              # Usa el Dockerfile de esa carpeta
+    container_name: backend_micro
+    volumes:
+      - ./backend:/var/www/html          # Sincroniza tu código local con el contenedor
+    depends_on:
+      - db                               # No arranca hasta que la BD esté lista
+
+  # 3. SERVIDOR WEB (Nginx)
+  webserver:
+    image: nginx:alpine                  # Versión ligera de Nginx
+    container_name: nginx_micro
+    ports:
+      - "8080:80"                        # Acceso local: http://localhost:8080
+    volumes:
+      # MUCHA ATENCIÓN AQUÍ: Esta ruta debe ser donde Angular deja el index.html
+      - ./frontend/dist/frontend/browser:/usr/share/nginx/html
+      - ./docker/nginx/default.conf:/etc/nginx/conf.d/default.conf
+    depends_on:
+      - backend
+
+  # 4. PORTAINER (Gestión visual)
+  portainer:
+    image: portainer/portainer-ce:latest
+    container_name: portainer_micro
+    ports:
+      - "9443:9443"                      # Acceso: https://localhost:9443
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock # Para que Portainer "vea" a Docker
+
+  # 5. NGROK (Túnel público)
+  ngrok:
+    image: ngrok/ngrok:latest
+    container_name: ngrok_micro
+    environment:
+      NGROK_AUTHTOKEN: ${NGROK_AUTHTOKEN} # Tu token largo de la web
+    command: "http webserver:80"         # Apunta al puerto 80 del Nginx
+    depends_on:
+      - webserver
+
+volumes:
+  db_data:                               # Definición del volumen para MySQL
