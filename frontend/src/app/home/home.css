@@ -1,0 +1,372 @@
+/* Modern Simpsons Variables */
+:root {
+    --simpsons-yellow: #FFD90F;
+    --simpsons-sky: #87CEEB;
+    --text-primary: #1a1a1a;
+    --text-secondary: #666;
+    --white: #ffffff;
+    --card-shadow: 0 10px 40px rgba(0, 0, 0, 0.08);
+    --hover-shadow: 0 20px 50px rgba(0, 0, 0, 0.12);
+}
+
+.main-wrapper {
+    min-height: 100vh;
+    background-color: var(--simpsons-sky);
+    position: relative;
+    overflow-x: hidden;
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+}
+
+/* --- CLOUD ANIMATIONS --- */
+.clouds-container {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    pointer-events: none;
+    z-index: 0;
+}
+
+.cloud {
+    width: 200px;
+    height: 60px;
+    background: #fff;
+    border-radius: 200px;
+    position: absolute;
+    opacity: 0.9;
+}
+
+.cloud:after,
+.cloud:before {
+    content: '';
+    position: absolute;
+    background: #fff;
+    width: 100px;
+    height: 80px;
+    position: absolute;
+    top: -15px;
+    left: 10px;
+    border-radius: 100px;
+    transform: rotate(30deg);
+}
+
+.cloud:after {
+    width: 120px;
+    height: 120px;
+    top: -55px;
+    left: auto;
+    right: 15px;
+}
+
+/* Animated Cloud Positions */
+.x1 {
+    top: 100px;
+    left: -200px;
+    transform: scale(0.8);
+    animation: moveCloud 35s linear infinite;
+}
+
+.x2 {
+    top: 250px;
+    left: -300px;
+    transform: scale(0.6);
+    opacity: 0.7;
+    animation: moveCloud 55s linear infinite;
+    animation-delay: 5s;
+}
+
+.x3 {
+    top: 50px;
+    left: -400px;
+    transform: scale(0.9);
+    opacity: 0.8;
+    animation: moveCloud 25s linear infinite;
+    animation-delay: 10s;
+}
+
+.x4 {
+    top: 400px;
+    left: -200px;
+    transform: scale(0.5);
+    opacity: 0.6;
+    animation: moveCloud 45s linear infinite;
+    animation-delay: 15s;
+}
+
+.x5 {
+    top: 150px;
+    left: -100px;
+    transform: scale(0.7);
+    animation: moveCloud 60s linear infinite;
+    animation-delay: 2s;
+}
+
+@keyframes moveCloud {
+    0% {
+        transform: translateX(0) scale(var(--scale, 1));
+    }
+
+    100% {
+        transform: translateX(120vw) scale(var(--scale, 1));
+    }
+}
+
+/* --- HERO SECTION --- */
+.content-container {
+    position: relative;
+    z-index: 1;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 2rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding-top: 80px;
+}
+
+.hero {
+    text-align: center;
+    margin-bottom: 0.5rem;
+    width: 100%;
+}
+
+.title {
+    font-size: 5rem;
+    font-weight: 800;
+    color: var(--white);
+    letter-spacing: -2px;
+    margin-bottom: 0.5rem;
+    text-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    line-height: 1.1;
+}
+
+.title .highlight {
+    color: var(--simpsons-yellow);
+    /* Subtle stroke for readability on light clouds */
+    -webkit-text-stroke: 2px #d4b200;
+    text-shadow: 4px 4px 0px rgba(0, 0, 0, 0.1);
+    margin-left: 10px;
+}
+
+.subtitle {
+    font-size: 1.5rem;
+    color: #1a1a1a;
+    font-weight: 500;
+    margin-bottom: 1rem;
+    opacity: 0.8;
+}
+
+/* Modern Search Box */
+.search-container {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+}
+
+.search-box {
+    background: var(--white);
+    padding: 0.5rem;
+    border-radius: 50px;
+    display: flex;
+    align-items: center;
+    width: 100%;
+    max-width: 600px;
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.search-box:focus-within {
+    transform: translateY(-2px);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+}
+
+.search-icon {
+    font-size: 1.2rem;
+    padding-left: 1.5rem;
+    opacity: 0.5;
+}
+
+.search-box input {
+    border: none;
+    background: transparent;
+    padding: 1rem 1.5rem;
+    font-size: 1.1rem;
+    flex-grow: 1;
+    outline: none;
+    color: var(--text-primary);
+}
+
+.btn-search {
+    background: var(--simpsons-yellow);
+    border: none;
+    padding: 1rem 2rem;
+    border-radius: 40px;
+    font-weight: 700;
+    color: #333;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.btn-search:hover {
+    background: #ffc107;
+    transform: scale(1.05);
+}
+
+/* --- CARDS GRID --- */
+/* --- BUBBLES CONTAINER --- */
+.bubbles-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 4rem;
+    width: 100%;
+    margin-top: 1rem;
+}
+
+.bubble-item {
+    position: relative;
+    width: 300px;
+    height: 300px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    cursor: pointer;
+    transition: transform 0.4s ease;
+    z-index: 10;
+}
+
+.bubble-item:hover {
+    transform: scale(1.1);
+    z-index: 20;
+}
+
+.bubble-bg {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border-radius: 61% 39% 53% 47% / 60% 41% 59% 40%;
+    background: rgba(255, 255, 255, 0.25);
+    backdrop-filter: blur(8px);
+    border: 2px solid rgba(255, 255, 255, 0.4);
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+    animation: wobble 8s ease-in-out infinite;
+    z-index: -1;
+    transition: all 0.4s ease;
+}
+
+.bubble-item:nth-child(2) .bubble-bg {
+    animation-delay: -2s;
+    border-radius: 46% 54% 39% 61% / 52% 58% 42% 48%;
+}
+
+.bubble-item:nth-child(3) .bubble-bg {
+    animation-delay: -5s;
+    border-radius: 56% 44% 59% 41% / 38% 60% 40% 62%;
+}
+
+.bubble-item:hover .bubble-bg {
+    background: var(--white);
+    border-radius: 50%;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
+}
+
+.card-pink:hover .bubble-bg {
+    background: #EF7EAD;
+    box-shadow: 0 20px 60px rgba(239, 126, 173, 0.4);
+}
+
+.bubble-content {
+    padding: 2rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+    transition: transform 0.3s ease;
+    pointer-events: none;
+    /* Let clicks pass to parent */
+}
+
+.bubble-icon {
+    font-size: 4rem;
+    margin-bottom: 0.5rem;
+    filter: drop-shadow(0 4px 0 rgba(0, 0, 0, 0.1));
+    transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.bubble-item:hover .bubble-icon {
+    transform: scale(1.2) rotate(10deg);
+}
+
+.bubble-content h3 {
+    font-size: 1.8rem;
+    font-weight: 800;
+    margin: 0;
+    color: var(--text-primary);
+    text-shadow: 0 2px 0 rgba(255, 255, 255, 0.5);
+}
+
+.bubble-content p {
+    font-size: 1rem;
+    font-weight: 500;
+    color: #444;
+    /* Darker than before due to light bg */
+    margin: 0;
+    opacity: 0;
+    transform: translateY(10px);
+    transition: all 0.3s ease;
+    max-width: 200px;
+}
+
+.bubble-item:hover .bubble-content p {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+@keyframes wobble {
+
+    0%,
+    100% {
+        border-radius: 61% 39% 53% 47% / 60% 41% 59% 40%;
+    }
+
+    33% {
+        border-radius: 50% 50% 50% 50% / 50% 50% 50% 50%;
+    }
+
+    66% {
+        border-radius: 46% 54% 39% 61% / 52% 58% 42% 48%;
+    }
+}
+
+/* Mobile Responsiveness */
+@media (max-width: 900px) {
+    .title {
+        font-size: 3.5rem;
+    }
+
+    .bubbles-container {
+        gap: 2rem;
+    }
+
+    .bubble-item {
+        width: 250px;
+        height: 250px;
+    }
+}
+
+@media (max-width: 600px) {
+    .title {
+        font-size: 2.5rem;
+    }
+
+    .bubbles-container {
+        flex-direction: column;
+    }
+}

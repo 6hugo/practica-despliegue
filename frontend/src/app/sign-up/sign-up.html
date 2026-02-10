@@ -1,0 +1,81 @@
+<div class="auth-container">
+    <div class="auth-card">
+        <div class="donut-decoration">🍩</div>
+
+        <div class="auth-header">
+            <h1 class="auth-title">{{ isLoginMode ? 'Welcome Back!' : 'Join the Family' }}</h1>
+            <p class="auth-subtitle">
+                {{ isLoginMode ? 'Enter your details to sign in' : 'Create your account to start exploring' }}
+            </p>
+
+            <!-- Message Display -->
+            <div *ngIf="message"
+                [ngClass]="{'message-success': messageType === 'success', 'message-error': messageType === 'error'}"
+                class="auth-message">
+                {{ message }}
+            </div>
+        </div>
+
+        <!-- Login Form -->
+        <form *ngIf="isLoginMode" (ngSubmit)="onSubmit()" class="auth-form">
+            <div class="form-group">
+                <label class="form-label">Email Address</label>
+                <input type="email" [(ngModel)]="loginData.email" name="email" class="form-input"
+                    placeholder="homer@simpsons.com" required>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">Password</label>
+                <input type="password" [(ngModel)]="loginData.password" name="password" class="form-input"
+                    placeholder="••••••••" required>
+            </div>
+
+            <button type="submit" class="submit-btn" [disabled]="isLoading">
+                {{ isLoading ? 'Signing In...' : 'Sign In' }}
+            </button>
+
+            <p>Admin users can sign in with:</p>
+            <p>Username: admin@simpsons.com</p>
+            <p>Password: admin</p>
+        </form>
+
+        <!-- Sign Up Form -->
+        <form *ngIf="!isLoginMode" (ngSubmit)="onSubmit()" class="auth-form">
+            <div class="form-group">
+                <label class="form-label">Username</label>
+                <input type="text" [(ngModel)]="signupData.username" name="username" class="form-input"
+                    placeholder="ElBarto" required>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">Email Address</label>
+                <input type="email" [(ngModel)]="signupData.email" name="email" class="form-input"
+                    placeholder="lisa@simpsons.com" required>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">Password</label>
+                <input type="password" [(ngModel)]="signupData.password" name="password" class="form-input"
+                    placeholder="••••••••" required>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">Confirm Password</label>
+                <input type="password" [(ngModel)]="signupData.confirmPassword" name="confirmPassword"
+                    class="form-input" placeholder="••••••••" required>
+            </div>
+
+            <button type="submit" class="submit-btn" [disabled]="isLoading">
+                {{ isLoading ? 'Creating Account...' : 'Create Account' }}
+            </button>
+        </form>
+
+        <!-- Toggle Section -->
+        <div class="toggle-section">
+            {{ isLoginMode ? "Don't have an account?" : "Already have an account?" }}
+            <a (click)="toggleMode()" class="toggle-link">
+                {{ isLoginMode ? 'Create one' : 'Sign In' }}
+            </a>
+        </div>
+    </div>
+</div>

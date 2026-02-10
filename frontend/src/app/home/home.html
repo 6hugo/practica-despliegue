@@ -1,0 +1,28 @@
+<div class="main-wrapper">
+    <!-- Background Clouds -->
+    <div class="clouds-container">
+        <div class="cloud x1"></div>
+        <div class="cloud x2"></div>
+        <div class="cloud x3"></div>
+        <div class="cloud x4"></div>
+        <div class="cloud x5"></div>
+    </div>
+
+    <main class="content-container">
+        <section class="hero">
+            <h1 class="title">The Simpsons<span class="highlight">Pedia</span></h1>
+            <p class="subtitle">The definitive encyclopedia of the most famous family.</p>
+        </section>
+        
+        <section class="bubbles-container">
+            <div *ngFor="let cat of categories" class="bubble-item" [ngClass]="cat.colorClass" [routerLink]="cat.route">
+                <div class="bubble-content">
+                    <span class="bubble-icon" [innerHTML]="cat.icon"></span>
+                    <h3>{{ cat.title }}</h3>
+                    <p>{{ cat.description }}</p>
+                </div>
+                <div class="bubble-bg"></div>
+            </div>
+        </section>
+    </main>
+</div>

@@ -1,0 +1,93 @@
+<div class="search-section">
+    <div class="search-wrapper">
+        <span class="search-icon">🔍</span>
+        <input type="text" [(ngModel)]="searchTerm" (ngModelChange)="filterCharacters()"
+            placeholder="Search characters by name..." class="search-input">
+    </div>
+
+    <button class="filter-fav-btn" [class.active]="showFavoritesOnly" (click)="toggleShowFavorites()">
+        {{ showFavoritesOnly ? '❤️ All Characters' : '🤍 My Favorites' }}
+    </button>
+</div>
+
+<!-- Loading Toast -->
+<div class="loading-toast" *ngIf="loadingFavorites$ | async">
+    <div class="spinner-small"></div>
+    <span>Loading favorites...</span>
+</div>
+
+<div class="characters-container">
+    <div class="character-card" *ngFor="let character of (filteredCharacters$ | async); trackBy: trackById"
+        (click)="openModal(character)">
+        <div class="card-image-wrapper">
+            <button class="card-fav-btn" [class.active]="isFavorite(character)"
+                [class.btn-disabled]="loadingFavorites$ | async" [disabled]="loadingFavorites$ | async"
+                (click)="toggleFavorite(character, $event)">
+                <ng-container *ngIf="isProcessing(character.id); else heartIcon">
+                    <div class="spinner"></div>
+                </ng-container>
+                <ng-template #heartIcon>
+                    <svg class="heart-icon" viewBox="0 0 24 24">
+                        <path
+                            d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" />
+                    </svg>
+                </ng-template>
+            </button>
+
+            <img [src]="'https://cdn.thesimpsonsapi.com/500' + character.portrait_path" [alt]="character.name"
+                class="character-image"
+                onerror="this.style.display='none';this.parentElement.style.backgroundColor='#e0e0e0';">
+        </div>
+        <div class="card-content">
+            <h3 class="character-name">{{ character.name }}</h3>
+        </div>
+    </div>
+</div>
+
+<div class="modal-overlay" *ngIf="selectedCharacter" (click)="closeModal()">
+    <div class="modal-content" (click)="$event.stopPropagation()">
+        <div class="modal-header">
+            <button class="close-button" (click)="closeModal()">×</button>
+            <div class="modal-img-container">
+                <img [src]="'https://cdn.thesimpsonsapi.com/500' + selectedCharacter.portrait_path"
+                    [alt]="selectedCharacter.name"
+                    onerror="this.src='https://via.placeholder.com/300x400?text=No+Image'">
+            </div>
+        </div>
+
+        <div class="modal-body">
+            <h2 class="modal-name">{{ selectedCharacter.name }}</h2>
+
+            <span class="modal-status" [ngClass]="{
+                'status-alive': selectedCharacter.status === 'Alive',
+                'status-deceased': selectedCharacter.status === 'Deceased',
+                'status-unknown': selectedCharacter.status !== 'Alive' && selectedCharacter.status !== 'Deceased'
+            }">
+                {{ selectedCharacter.status }}
+            </span>
+
+            <div class="details-grid">
+                <div class="detail-item">
+                    <span class="detail-label">Occupation</span>
+                    <span class="detail-value">{{ selectedCharacter.occupation || 'N/A' }}</span>
+                </div>
+                <div class="detail-item">
+                    <span class="detail-label">Gender</span>
+                    <span class="detail-value">{{ selectedCharacter.gender || 'N/A' }}</span>
+                </div>
+                <div class="detail-item">
+                    <span class="detail-label">Age</span>
+                    <span class="detail-value">{{ selectedCharacter.age || 'N/A' }}</span>
+                </div>
+                <div class="detail-item">
+                    <span class="detail-label">Birthday</span>
+                    <span class="detail-value">{{ selectedCharacter.birthdate || 'N/A' }}</span>
+                </div>
+            </div>
+
+            <div class="phrase-box" *ngIf="selectedCharacter.phrases && selectedCharacter.phrases.length > 0">
+                "{{ selectedCharacter.phrases[0] }}"
+            </div>
+        </div>
+    </div>
+</div>

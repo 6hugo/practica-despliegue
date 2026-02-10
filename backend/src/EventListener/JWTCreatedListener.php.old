@@ -1,0 +1,25 @@
+<?php
+
+namespace App\EventListener;
+
+use Lexik\Bundle\JWTAuthenticationBundle\Event\JWTCreatedEvent;
+
+class JWTCreatedListener
+{
+    public function onJWTCreated(JWTCreatedEvent $event): void
+    {
+        $user = $event->getUser();
+        $payload = $event->getData();
+
+        // 1. Añadimos el ID (es un método estándar)
+        if (method_exists($user, 'getId')) {
+            $payload['id'] = $user->getId();
+        }
+
+        // 2. Añadimos el nombre para el saludo
+        // Intentamos obtener el nombre. Si no existe, usamos el identificador (email)
+        $payload['name'] = method_exists($user, 'getUsername') ? $user->getUsername() : $user->getUserIdentifier();
+
+        $event->setData($payload);
+    }
+}

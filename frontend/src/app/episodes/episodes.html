@@ -1,0 +1,101 @@
+<div class="search-section">
+    <div class="filters-wrapper">
+        <div class="filter-group">
+            <label class="filter-label">Season</label>
+            <select [(ngModel)]="seasonFilter" (ngModelChange)="updateSeasonFilter()" class="filter-select">
+                <option value="">All Seasons</option>
+                <option *ngFor="let s of availableSeasons" [value]="s">Season {{s}}</option>
+            </select>
+        </div>
+
+        <div class="filter-group">
+            <label class="filter-label">Year</label>
+            <select [(ngModel)]="yearFilter" (ngModelChange)="updateYearFilter()" class="filter-select">
+                <option value="">All Years</option>
+                <option *ngFor="let y of availableYears" [value]="y">{{y}}</option>
+            </select>
+        </div>
+
+        <div class="filter-group">
+            <label class="filter-label">Title</label>
+            <input type="text" [(ngModel)]="nameFilter" (ngModelChange)="updateNameFilter()"
+                placeholder="Search by name..." class="filter-input">
+        </div>
+
+        <button class="filter-fav-btn" [class.active]="showFavoritesOnly" (click)="toggleShowFavorites()">
+            {{ showFavoritesOnly ? '❤️ All Episodes' : '🤍 My Favorites' }}
+        </button>
+    </div>
+</div>
+
+<!-- Loading Toast -->
+<div class="loading-toast" *ngIf="loadingFavorites$ | async">
+    <div class="spinner-small"></div>
+    <span>Loading favorites...</span>
+</div>
+
+<div class="episodes-container">
+    <div class="episode-card" *ngFor="let episode of (filteredEpisodes$ | async)" (click)="openModal(episode)">
+        <div class="card-image-wrapper">
+            <button class="card-fav-btn" [class.active]="isFavorite(episode)"
+                [class.btn-disabled]="loadingFavorites$ | async" [disabled]="loadingFavorites$ | async"
+                (click)="toggleFavorite(episode, $event)">
+                <ng-container *ngIf="isProcessing(episode.id); else heartIcon">
+                    <div class="spinner"></div>
+                </ng-container>
+                <ng-template #heartIcon>
+                    <svg class="heart-icon" viewBox="0 0 24 24">
+                        <path
+                            d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" />
+                    </svg>
+                </ng-template>
+            </button>
+
+            <img [src]="episode.image_path ? 'https://cdn.thesimpsonsapi.com/500' + episode.image_path : 'https://via.placeholder.com/300x160?text=No+Image'"
+                [alt]="episode.name" class="episode-image"
+                onerror="this.src='https://via.placeholder.com/300x160?text=Error'">
+        </div>
+        <div class="card-content">
+            <h3 class="episode-title">{{ episode.name }}</h3>
+            <span class="episode-meta">Season {{ episode.season }} - Episode {{ episode.episode_number }}</span>
+            <p *ngIf="episode.synopsis" style="font-size: 0.8rem; color: #888; margin-top: 0.5rem; line-height: 1.4;">
+            </p>
+        </div>
+    </div>
+</div>
+
+<div class="modal-overlay" *ngIf="selectedEpisode" (click)="closeModal()">
+    <div class="modal-content" (click)="$event.stopPropagation()">
+        <div class="modal-header">
+            <button class="close-button" (click)="closeModal()">×</button>
+            <div class="modal-img-wrapper"
+                style="width: 100%; height: 100%; display: flex; justify-content: center; align-items: center;">
+                <img [src]="selectedEpisode.image_path ? 'https://cdn.thesimpsonsapi.com/500' + selectedEpisode.image_path : 'https://via.placeholder.com/300x160?text=No+Image'"
+                    [alt]="selectedEpisode.name"
+                    style="max-width: 100%; max-height: 100%; object-fit: contain; box-shadow: 0 4px 15px rgba(0,0,0,0.2); border-radius: 8px;"
+                    onerror="this.src='https://via.placeholder.com/300x160?text=No+Image'">
+            </div>
+        </div>
+
+        <div class="modal-body">
+            <h2 class="modal-name">{{ selectedEpisode.name }}</h2>
+
+            <div class="details-grid">
+                <div class="detail-item">
+                    <span class="detail-label">Season</span>
+                    <span class="detail-value">{{ selectedEpisode.season }}</span>
+                </div>
+                <div class="detail-item">
+                    <span class="detail-label">Episode</span>
+                    <span class="detail-value">{{ selectedEpisode.episode_number }}</span>
+                </div>
+                <div class="detail-item">
+                    <span class="detail-label">Air Date</span>
+                    <span class="detail-value">{{ selectedEpisode.airdate || 'Unknown' }}</span>
+                </div>
+            </div>
+
+            <div class="phrase-box" *ngIf="selectedEpisode.synopsis">
+                {{ selectedEpisode.synopsis }}
+            </div>
+        </div>

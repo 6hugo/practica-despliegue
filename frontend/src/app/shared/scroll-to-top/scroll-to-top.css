@@ -1,0 +1,40 @@
+/* Scroll To Top Button Styles */
+.scroll-top-btn {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    width: 50px;
+    height: 50px;
+    background: linear-gradient(135deg, #FFD90F 0%, #F5B041 100%);
+    color: #333;
+    border: none;
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 1.5rem;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(20px);
+    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    z-index: 900;
+    /* High z-index but below modal overlay (usually 1000) */
+}
+
+.scroll-top-btn.show {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+}
+
+.scroll-top-btn:hover {
+    background: #FFD90F;
+    transform: translateY(-5px);
+    box-shadow: 0 8px 25px rgba(255, 217, 15, 0.4);
+}
+
+.scroll-top-btn:active {
+    transform: translateY(-2px);
+}

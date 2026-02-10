@@ -1,0 +1,412 @@
+/* Search Styles */
+.search-section {
+    display: flex;
+    justify-content: center;
+    padding: 2rem 1rem 0;
+    margin-bottom: -1rem;
+}
+
+.search-wrapper {
+    position: relative;
+    width: 100%;
+    max-width: 500px;
+}
+
+.search-input {
+    width: 100%;
+    padding: 1rem 1rem 1rem 3rem;
+    border: 2px solid #eee;
+    border-radius: 50px;
+    font-size: 1rem;
+    outline: none;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+}
+
+.search-input:focus {
+    border-color: #FFD90F;
+    box-shadow: 0 8px 20px rgba(255, 217, 15, 0.2);
+}
+
+.search-icon {
+    position: absolute;
+    left: 1.2rem;
+    top: 50%;
+    transform: translateY(-50%);
+    opacity: 0.5;
+    font-size: 1.1rem;
+}
+
+/* Main Container */
+.locations-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 2rem;
+    padding: 3rem 1rem;
+    max-width: 1400px;
+    margin: 0 auto;
+}
+
+/* Minimalist Clean Design - Matching Episodes */
+.location-card {
+    position: relative;
+    width: 260px;
+    /* Matched episodes card width */
+    background: #fff;
+    border-radius: 16px;
+    overflow: hidden;
+    /* Soft shadow instead of hard comic shadow */
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+    transition: all 0.3s ease;
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    border: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+/* Hover Effect */
+.location-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+    border-color: #FFD90F;
+    /* Subtle active state color */
+}
+
+.location-card:active {
+    transform: translateY(-2px);
+}
+
+.card-image-wrapper {
+    height: 160px;
+    width: 100%;
+    background: #f0f0f0;
+    /* Matched episode background */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+    position: relative;
+    padding: 0;
+    /* Removed padding to let image fill full width like episodes */
+}
+
+.location-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.3s ease;
+}
+
+.location-card:hover .location-image {
+    transform: scale(1.05);
+}
+
+.card-content {
+    padding: 1.2rem;
+    background: #fff;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    flex-grow: 1;
+}
+
+.location-name {
+    font-family: 'Inter', system-ui, sans-serif;
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: #333;
+    line-height: 1.3;
+    margin: 0 0 0.5rem 0;
+    /* Added margin bottom for meta text space */
+}
+
+.location-card:hover .location-name {
+    color: #333;
+    /* Reset to dark, only border changes color in episodes design mostly */
+}
+
+/* Added detail text for matching look */
+.location-meta {
+    font-size: 0.85rem;
+    color: #666;
+    font-weight: 500;
+}
+
+/* Modal Styles */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.6);
+    backdrop-filter: blur(8px);
+    z-index: 1000;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 1rem;
+    animation: fadeIn 0.3s ease;
+}
+
+.modal-content {
+    background: white;
+    border-radius: 20px;
+    width: 90%;
+    max-width: 500px;
+    max-height: 90vh;
+    overflow-y: auto;
+    position: relative;
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+    animation: slideUp 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    display: flex;
+    flex-direction: column;
+}
+
+.modal-header {
+    background: linear-gradient(135deg, #FFD90F 0%, #F5B041 100%);
+    padding: 1.5rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 120px;
+    position: relative;
+}
+
+.close-button {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    background: rgba(255, 255, 255, 0.3);
+    border: none;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    font-size: 24px;
+    line-height: 1;
+    color: #333;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.2s;
+    z-index: 50;
+}
+
+.close-button:hover {
+    background: rgba(255, 255, 255, 0.6);
+}
+
+.modal-body {
+    padding: 2rem;
+    text-align: center;
+}
+
+.modal-name {
+    font-size: 1.8rem;
+    font-weight: 800;
+    color: #2d3436;
+    margin-bottom: 1.5rem;
+}
+
+.details-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+    text-align: left;
+}
+
+.detail-item {
+    background: #f8f9fa;
+    padding: 1rem;
+    border-radius: 12px;
+    text-align: center;
+}
+
+/* Animations */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes slideUp {
+    from {
+        transform: translateY(50px);
+        opacity: 0;
+    }
+
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+/* Loading Toast */
+.loading-toast {
+    position: fixed;
+    bottom: 2rem;
+    left: 50%;
+    transform: translateX(-50%);
+    background: white;
+    padding: 0.8rem 1.5rem;
+    border-radius: 50px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+    z-index: 2000;
+    border: 2px solid #FFD90F;
+    animation: slideUpToast 0.3s ease-out;
+}
+
+.loading-toast span {
+    font-family: 'Inter', system-ui, sans-serif;
+    font-weight: 600;
+    color: #333;
+    font-size: 0.95rem;
+}
+
+.spinner-small {
+    width: 18px;
+    height: 18px;
+    border: 2px solid rgba(0, 0, 0, 0.1);
+    border-left-color: #FFD90F;
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+}
+
+@keyframes slideUpToast {
+    from {
+        transform: translate(-50%, 20px);
+        opacity: 0;
+    }
+
+    to {
+        transform: translate(-50%, 0);
+        opacity: 1;
+    }
+}
+
+/* Filter Fav Button */
+.filter-fav-btn {
+    padding: 0 1.5rem;
+    height: 48px;
+    /* Match other inputs */
+    border-radius: 50px;
+    border: 2px solid #eee;
+    background: white;
+    cursor: pointer;
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: #555;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    white-space: nowrap;
+    outline: none;
+    margin-left: 1rem;
+}
+
+.filter-fav-btn:hover {
+    border-color: #FFD90F;
+    background: #fffdf5;
+}
+
+.filter-fav-btn.active {
+    background: #FFD90F;
+    border-color: #FFD90F;
+    color: #333;
+    box-shadow: 0 4px 15px rgba(255, 217, 15, 0.3);
+}
+
+/* Card Favorite Button */
+.card-fav-btn {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    z-index: 10;
+    background: rgba(255, 255, 255, 0.7);
+    border: none;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    transition: transform 0.2s, background 0.2s;
+    opacity: 0;
+    transform: translateY(-5px);
+}
+
+.location-card:hover .card-fav-btn,
+.card-fav-btn.active {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.card-fav-btn:hover {
+    transform: scale(1.1);
+    background: white;
+}
+
+/* Disabled Favorite Button */
+.card-fav-btn:disabled,
+.card-fav-btn.btn-disabled {
+    cursor: wait;
+    opacity: 0.7 !important;
+    background: #f5f5f5;
+    border: 1px solid #eee;
+}
+
+.card-fav-btn:disabled .heart-icon,
+.card-fav-btn.btn-disabled .heart-icon {
+    stroke: #ccc;
+}
+
+.heart-icon {
+    width: 18px;
+    height: 18px;
+    fill: transparent;
+    stroke: #999;
+    stroke-width: 2px;
+    transition: all 0.2s ease;
+}
+
+.card-fav-btn:hover .heart-icon {
+    stroke: #ff4757;
+}
+
+.card-fav-btn.active .heart-icon {
+    fill: #ff4757;
+    stroke: #ff4757;
+}
+
+.spinner {
+    width: 18px;
+    height: 18px;
+    border: 2px solid rgba(0, 0, 0, 0.1);
+    border-left-color: #FFD90F;
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
+}

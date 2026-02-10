@@ -1,0 +1,31 @@
+<nav class="navbar navbar-expand-lg simpsons-navbar">
+  <div class="container-fluid">
+    <a class="navbar-brand" routerLink="/home">Home</a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNav">
+      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+        <li class="nav-item">
+          <a class="nav-link" routerLink="/characters">Characters</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" routerLink="/episodes">Episodes</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" routerLink="/locations">Locations</a>
+        </li>
+        <li class="nav-item" *ngIf="authService.isAdmin$ | async">
+          <a class="nav-link" routerLink="/admin">Admin</a>
+        </li>
+      </ul>
+      <div *ngIf="authService.user$ | async as user; else guestBlock" class="d-flex align-items-center">
+        <span class="nav-link" style="font-size: 1.2rem; cursor: default;">{{ user }}</span>
+        <button class="btn btn-outline-danger ms-2" (click)="logout()">Log Out</button>
+      </div>
+      <ng-template #guestBlock>
+        <a class="nav-link" routerLink="/sign-up">Sign Up</a>
+      </ng-template>
+    </div>
+  </div>
+</nav>

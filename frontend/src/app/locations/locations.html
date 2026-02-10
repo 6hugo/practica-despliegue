@@ -1,0 +1,83 @@
+<div class="search-section">
+    <div class="search-wrapper">
+        <span class="search-icon">🔍</span>
+        <input type="text" [(ngModel)]="searchTerm" (ngModelChange)="filterLocations()"
+            placeholder="Search locations..." class="search-input">
+    </div>
+
+    <button class="filter-fav-btn" [class.active]="showFavoritesOnly" (click)="toggleShowFavorites()">
+        {{ showFavoritesOnly ? '❤️ All Locations' : '🤍 My Favorites' }}
+    </button>
+</div>
+
+<!-- Loading Toast -->
+<div class="loading-toast" *ngIf="loadingFavorites$ | async">
+    <div class="spinner-small"></div>
+    <span>Loading favorites...</span>
+</div>
+
+<div class="locations-container">
+    <div class="location-card" *ngFor="let location of (filteredLocations$ | async)" (click)="openModal(location)">
+        <div class="card-image-wrapper">
+            <button class="card-fav-btn" [class.active]="isFavorite(location)"
+                [class.btn-disabled]="loadingFavorites$ | async" [disabled]="loadingFavorites$ | async"
+                (click)="toggleFavorite(location, $event)">
+                <ng-container *ngIf="isProcessing(location.id); else heartIcon">
+                    <div class="spinner"></div>
+                </ng-container>
+                <ng-template #heartIcon>
+                    <svg class="heart-icon" viewBox="0 0 24 24">
+                        <path
+                            d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" />
+                    </svg>
+                </ng-template>
+            </button>
+            <img [src]="location.image_path ? 'https://cdn.thesimpsonsapi.com/500' + location.image_path : 'https://via.placeholder.com/300x200?text=No+Image'"
+                [alt]="location.name" class="location-image"
+                onerror="this.src='https://via.placeholder.com/300x200?text=No+Image'">
+        </div>
+        <div class="card-content">
+            <h3 class="location-name">{{ location.name }}</h3>
+            <span class="location-meta" *ngIf="location.type">{{ location.type }}</span>
+        </div>
+    </div>
+</div>
+
+<div class="modal-overlay" *ngIf="selectedLocation$ | async as selectedLocation" (click)="closeModal()">
+    <div class="modal-content" (click)="$event.stopPropagation()">
+        <div class="modal-header">
+            <button class="close-button" (click)="closeModal()">×</button>
+            <div class="modal-img-container"
+                style="display: flex; justify-content: center; align-items: flex-end; width: 100%;">
+                <img [src]="selectedLocation.image_path ? 'https://cdn.thesimpsonsapi.com/500' + selectedLocation.image_path : 'https://via.placeholder.com/300x200?text=No+Image'"
+                    [alt]="selectedLocation.name"
+                    style="max-width: 100%; max-height: 240px; object-fit: contain; margin-bottom: -40px; z-index: 10;"
+                    onerror="this.src='https://via.placeholder.com/300x200?text=No+Image'">
+            </div>
+        </div>
+
+        <div class="modal-body">
+            <h2 class="modal-name" style="margin-top: 50px;">{{ selectedLocation.name }}</h2>
+
+            <div class="details-container" style="margin-top: 20px;">
+                <div *ngIf="selectedLocation.type" style="margin-bottom: 15px;">
+                    <span
+                        style="background: #ffd900; padding: 4px 12px; border-radius: 20px; font-weight: bold; font-size: 0.8rem; text-transform: uppercase;">
+                        {{ selectedLocation.type }}
+                    </span>
+                </div>
+
+                <div class="description-box"
+                    style="background: #f8f9fa; padding: 20px; border-radius: 12px; border-left: 5px solid #ffd900;">
+                    <p style="color: #444; line-height: 1.6; margin: 0; font-size: 1rem;">
+                        {{ selectedLocation.description }}
+                    </p>
+                </div>
+
+                <div *ngIf="selectedLocation.town" style="margin-top: 15px; font-style: italic; color: #777;">
+                    📍 {{ selectedLocation.town }}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

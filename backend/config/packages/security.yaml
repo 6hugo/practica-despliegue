@@ -1,0 +1,44 @@
+# backend/config/packages/security.yaml
+security:
+    password_hashers:
+        Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface: 'auto'
+        App\Entity\User:
+            algorithm: auto
+
+    providers:
+        app_user_provider:
+            entity:
+                class: App\Entity\User
+                property: email # Esto es correcto, Hugo se identifica por su email
+
+    firewalls:
+        dev:
+            pattern: ^/(_(profiler|wdt)|css|images|js)/
+            security: false
+        
+        login:
+            pattern: ^/api/login_check # Cambia el patrón a la ruta exacta de login
+            stateless: true
+            json_login:
+                check_path: /api/login_check
+                success_handler: lexik_jwt_authentication.handler.authentication_success
+                failure_handler: lexik_jwt_authentication.handler.authentication_failure
+
+        api:
+            pattern: ^/api
+            stateless: true
+            jwt: ~
+
+    access_control:
+        - { path: ^/api/fix-db, roles: PUBLIC_ACCESS }
+        # 1. El login debe ser siempre público
+        - { path: ^/api/login_check, roles: PUBLIC_ACCESS }
+        
+        # 2. El registro (POST /api/users) también público
+        - { path: ^/api/users, methods: [POST], roles: PUBLIC_ACCESS }
+        
+        # 3. Documentación pública
+        - { path: ^/api$, roles: PUBLIC_ACCESS }
+        - { path: ^/api/contexts, roles: PUBLIC_ACCESS }
+        # 4. TODO lo demás de la API requiere estar logueado (Favoritos, Episodes, etc.)
+        - { path: ^/api, roles: IS_AUTHENTICATED_FULLY }
